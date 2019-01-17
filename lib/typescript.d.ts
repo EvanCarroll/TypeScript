@@ -3013,6 +3013,7 @@ declare namespace ts {
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
@@ -4706,8 +4707,8 @@ declare namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
-        getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
@@ -5149,6 +5150,9 @@ declare namespace ts {
     interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
+    }
+    interface RenameInfoOptions {
+        readonly allowRenameOfImportPath?: boolean;
     }
     interface SignatureHelpParameter {
         name: string;
